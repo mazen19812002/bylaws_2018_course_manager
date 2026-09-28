@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق لائحة 2018 - كلية الهندسة</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0f2027;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-size: 13px;
+        }
+
+        /* Container Frame (Windows Aero Glass Style) */
+        .window-container {
+            width: 98vw;
+            height: 96vh;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(29, 146, 236, 0.5);
+            border: 1px solid #1d92ec;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            /* Light Blue Gradient Background with Curves */
+            background: linear-gradient(180deg, 
+                        #0080ff 0%, 
+                        #3399ff 12%, 
+                        #e8f4fc 35%, 
+                        #ffffff 65%, 
+                        #c1e0f8 92%, 
+                        #0078d7 100%);
+            position: relative;
+        }
+
+        .title-bar {
+            background: linear-gradient(180deg, #1fa2ff 0%, #0066cc 100%);
+            color: #ffffff;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            user-select: none;
+            border-bottom: 1px solid #004d99;
+        }
+
+        .title-btn-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .win-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .win-btn:hover { background: rgba(255,255,255,0.4); }
+
+        /* Top Menu Bar */
+        .menu-bar {
+            background: linear-gradient(180deg, #1b8adb 0%, #086bb5 100%);
+            display: flex;
+            gap: 18px;
+            padding: 5px 15px;
+            color: #e6f2ff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .menu-item:hover { color: #ffffff; text-shadow: 0 0 6px rgba(255,255,255,0.8); }
+
+        .toolbar {
+            background: #eef7ff;
+            border-bottom: 1px solid #b3d7ff;
+            padding: 6px 12px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            height: 30px;
+            padding: 0 12px;
+            border-radius: 4px;
+            border: 1px solid #82b1ff;
+            background: linear-gradient(180deg, #ffffff 0%, #d0e4ff 100%);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+            color: #0d47a1;
+            box-shadow: inset 0 1px 0 #ffffff;
+            transition: transform 0.1s, filter 0.2s;
+        }
+        .tool-btn:hover { transform: scale(1.02); filter: brightness(1.05); }
+
+        .tool-btn.red-btn {
+            background: linear-gradient(180deg, #ff8a80 0%, #d50000 100%);
+            border-color: #b71c1c;
+            color: white;
+        }
+
+        .tool-btn.green-btn {
+            background: linear-gradient(180deg, #b9f6ca 0%, #00c853 100%);
+            border-color: #1b5e20;
+            color: white;
+        }
+
+        .input-text, .select-box {
+            border: 1px solid #64b5f6;
+            border-radius: 3px;
+            padding: 5px 10px;
+            background: #ffffff;
+            outline: none;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            color: #0d47a1;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .input-text:focus, .select-box:focus {
+            border-color: #1e88e5;
+            box-shadow: 0 0 5px rgba(30, 136, 229, 0.6);
+        }
+
+        /* Tabs Navigation */
+        .tab-container {
+            display: flex;
+            padding-left: 12px;
+            padding-right: 12px;
+            padding-top: 5px;
+            gap: 4px;
+            background: transparent;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #ffffff;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid #005bb5;
+            background: linear-gradient(180deg, #29b6f6 0%, #0277bd 100%);
+            cursor: pointer;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab.active {
+            background: linear-gradient(180deg, #0288d1 0%, #01579b 100%);
+            border-bottom: none;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+        }
+
+        .content-area {
+            margin: 0 10px 8px 10px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(5px);
+            border: 1px solid #90caf9;
+            border-radius: 0 4px 4px 4px;
+            padding: 14px;
+            flex-grow: 1;
+            color: #0d47a1;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .group-box {
+            border: 1px solid #b3e5fc;
+            border-radius: 5px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            background: rgba(240, 248, 255, 0.65);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .group-title {
+            color: #1565c0;
+            font-weight: bold;
+            font-size: 13px;
+            width: 100%;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Badge Pills for Classification */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+        .badge-extended { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .badge-term1 { background-color: #cff4fc; color: #055160; border: 1px solid #b6effb; }
+        .badge-term2 { background-color: #fff3cd; color: #664d03; border: 1px solid #ffecb5; }
+
+        /* Table Styling */
+        .table-wrapper {
+            flex-grow: 1;
+            overflow: auto;
+            border: 1px solid #90caf9;
+            border-radius: 4px;
+            background: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 11.5px;
+            text-align: center;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            background: linear-gradient(180deg, #1e88e5 0%, #1565c0 100%);
+            color: #ffffff;
+            padding: 8px 6px;
+            font-weight: 700;
+            border-bottom: 2px solid #0d47a1;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            white-space: nowrap;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        th:hover { background: linear-gradient(180deg, #2196f3 0%, #1976d2 100%); }
+
+        td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            border-left: 1px solid #f0f0f0;
+            white-space: nowrap;
+            color: #212121;
+        }
+
+        tr:nth-child(even) { background-color: #f7faff; }
+        tr:hover { background-color: #e1f5fe !important; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            padding: 10px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+            border: 1px solid #90caf9;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 { font-size: 13px; color: #0277bd; margin-bottom: 6px; font-weight: bold; }
+        .stat-card .val { font-size: 26px; font-weight: bold; color: #0d47a1; }
+
+        .col-toggle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 8px;
+            padding: 8px;
+        }
+
+        .col-toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid #bbdefb;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Animated Footer */
+        .footer-bar {
+            height: 32px;
+            background: linear-gradient(90deg, #003366, #0066cc, #00a86b, #0066cc, #003366);
+            background-size: 300% 100%;
+            animation: gradientMove 7s ease infinite;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            border-top: 1px solid #29b6f6;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Big Round Download Action Button */
+        .big-download-btn {
+            position: absolute;
+            left: 25px;
+            bottom: 45px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #4fc3f7, #0288d1 60%, #01579b 100%);
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 2px 5px rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            z-index: 50;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .big-download-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(2, 136, 209, 0.5);
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="window-container">
+    <div class="title-bar">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-graduation-cap" style="color: #ffeb3b;"></i>
+            <span>نظام إدارة بيانات اللائحة الداخلية 2018 - كلية الهندسة</span>
+        </div>
+        <div class="title-btn-group">
+            <button class="win-btn" onclick="toggleFullScreen()" title="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
+        </div>
+    </div>
+
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <span class="menu-item" onclick="switchTab('data-tab')"><i class="fa-solid fa-table"></i> عرض البيانات</span>
+        <span class="menu-item" onclick="switchTab('columns-tab')"><i class="fa-solid fa-columns"></i> اختيار الأعمدة</span>
+        <span class="menu-item" onclick="switchTab('stats-tab')"><i class="fa-solid fa-chart-pie"></i> الإحصائيات والتوزيع</span>
+        <span class="menu-item" onclick="resetFilters()"><i class="fa-solid fa-arrows-rotate"></i> إعادة ضبط التصفيات</span>
+        <span class="menu-item" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> تصدير CSV</span>
+    </div>
+
+    <div class="toolbar">
+        <label>🔍 <strong>البحث العام:</strong></label>
+        <input type="text" id="globalSearch" class="input-text" placeholder="اسم أو كود المادة..." oninput="applyFilters()" style="width: 180px;">
+        
+        <label>🏷️ <strong>تصنيف المادة:</strong></label>
+        <select id="typeFilter" class="select-box" onchange="applyFilters()">
+            <option value="">جميع التصنيفات</option>
+            <option value="مادة ممتدة (فصلين)">مادة ممتدة (فصلين)</option>
+            <option value="مادة منتهية (ترم أول)">مادة منتهية (ترم أول)</option>
+            <option value="مادة منتهية (ترم ثاني)">مادة منتهية (ترم ثاني)</option>
+        </select>
+
+        <label>🎓 <strong>الفرقة:</strong></label>
+        <select id="gradeFilter" class="select-box" onchange="applyFilters()">
+            <option value="">جميع الفرق</option>
+        </select>
+
+        <label>🔬 <strong>التخصص:</strong></label>
+        <select id="specFilter" class="select-box" onchange="applyFilters()">
+            <option value="">جميع التخصصات</option>
+        </select>
+
+        <button class="tool-btn red-btn" onclick="resetFilters()"><i class="fa-solid fa-filter-circle-xmark"></i> مسح التصنيفات</button>
+        <button class="tool-btn green-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> تصدير البيانات</button>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab active" id="tab-btn-data" onclick="switchTab('data-tab')">
+            <i class="fa-solid fa-table"></i> جدول المواد وتصنيف الترم (<span id="recordCount">0</span>)
+        </div>
+        <div class="tab" id="tab-btn-columns" onclick="switchTab('columns-tab')">
+            <i class="fa-solid fa-list-check"></i> تخصيص الأعمدة
+        </div>
+        <div class="tab" id="tab-btn-stats" onclick="switchTab('stats-tab')">
+            <i class="fa-solid fa-chart-pie"></i> إحصائيات اللائحة
+        </div>
+    </div>
+
+    <!-- Work Panel Content Area -->
+    <div class="content-area">
+        
+        <!-- DATA TAB -->
+        <div id="data-tab" class="tab-content" style="display: flex; flex-direction: column; height: 100%;">
+            <div class="group-box">
+                <div class="group-title"><i class="fa-solid fa-filter"></i> تصفية المادة حسب العمود المحقق:</div>
+                <select id="colSelect" class="select-box">
+                    <option value="code">كود المادة</option>
+                    <option value="name">اسم المقرر</option>
+                    <option value="total">إجمالي الدرجات</option>
+                </select>
+                <input type="text" id="colSearch" class="input-text" placeholder="ابحث بقيمة العمود..." oninput="applyFilters()" style="width: 200px;">
+                <span style="margin-right: auto; font-weight: bold; color: #0277bd;">
+                    عدد المواد المعروضة: <span id="filteredCount">0</span> من أصل 181
+                </span>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="coursesTable">
+                    <thead>
+                        <tr id="tableHeader"></tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- COLUMNS TAB -->
+        <div id="columns-tab" class="tab-content hidden">
+            <div class="group-title"><i class="fa-solid fa-list-check"></i> حدد الأعمدة الظاهرة في الجدول:</div>
+            <div class="col-toggle-grid" id="colToggleGrid"></div>
+        </div>
+
+        <!-- STATS TAB -->
+        <div id="stats-tab" class="tab-content hidden">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>إجمالي مقررات اللائحة</h3>
+                    <div class="val" id="statTotal">181</div>
+                </div>
+                <div class="stat-card">
+                    <h3>مواد ممتدة (فصلين دراسيين)</h3>
+                    <div class="val" style="color:#0f5132" id="statExtended">36</div>
+                </div>
+                <div class="stat-card">
+                    <h3>مواد منتهية (ترم أول)</h3>
+                    <div class="val" style="color:#055160" id="statTerm1">70</div>
+                </div>
+                <div class="stat-card">
+                    <h3>مواد منتهية (ترم ثاني)</h3>
+                    <div class="val" style="color:#664d03" id="statTerm2">75</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Download Button -->
+        <div class="big-download-btn" onclick="exportCSV()" title="تصدير كـ CSV">↓</div>
+    </div>
+
+    <!-- Animated Footer -->
+    <div class="footer-bar">
+        All rights are reserved to Dr. Mazen Badawy – Doctor of English Teaching & Testing
+    </div>
+</div>
+
+<script>
+    const rawData = [
+        {"code":"BAS0001","name":"رياضيات هندسية (1)","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"4","s1_sec":"2","s1_written":"110","s1_year":"40","s1_oral":"--","s1_time":"3","s2_lec":"4","s2_sec":"2","s2_written":"110","s2_year":"40","s2_oral":"--","s2_time":"3","total":"300"},
+        {"code":"MEP0001","name":"ميكانيكا هندسية","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"200"},
+        {"code":"BAS0002","name":"فيزياء هندسية (1)","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"4","s1_sec":"2","s1_written":"90","s1_year":"30","s1_oral":"30","s1_time":"3","s2_lec":"4","s2_sec":"2","s2_written":"90","s2_year":"30","s2_oral":"30","s2_time":"3","total":"300"},
+        {"code":"MEP0302","name":"الرسم الهندسي والإسقاط","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"4","s1_written":"--","s1_year":"50","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"4","s2_written":"200","s2_year":"50","s2_oral":"--","s2_time":"4","total":"300"},
+        {"code":"EEC0101","name":"مقدمة في الحاسبات والبرمجة","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"MEP0103","name":"تكنولوجيا الانتاج","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"HUM0201","name":"لغة إنجليزية فنية","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"1","s2_sec":"1","s2_written":"35","s2_year":"15","s2_oral":"--","s2_time":"2","total":"50"},
+        {"code":"BAS0203","name":"كيمياء هندسية","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"HUM0202","name":"تاريخ العلوم الهندسية","grade":"الإعدادية","spec":"عام","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"--","s2_written":"40","s2_year":"10","s2_oral":"--","s2_time":"2","total":"50"},
+        {"code":"ARC1301","name":"التصميم المعماري (1)","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"5","s1_written":"-","s1_year":"60","s1_oral":"-","s1_time":"-","s2_lec":"1","s2_sec":"5","s2_written":"120","s2_year":"60","s2_oral":"60","s2_time":"7","total":"300"},
+        {"code":"ARC1302","name":"إنشاء معماري (1)","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"-","s1_year":"30","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"100","s2_year":"30","s2_oral":"40","s2_time":"5","total":"200"},
+        {"code":"ARC1103","name":"التدريب البصري (1)","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"90","s1_oral":"-","s1_time":"4","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"CVE1147","name":"المساحة","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"75","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"125"},
+        {"code":"CVE1048","name":"نظرية الإنشاءات","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"200"},
+        {"code":"HUM1120","name":"تاريخ ونظريات العمارة والفنون","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"4","s1_sec":"-","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"ARC1204","name":"تطبيقات الحاسب الآلي في العمارة (1)","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"1","s2_sec":"2","s2_written":"50","s2_year":"20","s2_oral":"30","s2_time":"3","total":"100"},
+        {"code":"HUM1219","name":"التذوق الفني في العمارة","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"-","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"2","total":"75"},
+        {"code":"ARC1005","name":"الظل والمنظور","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"2","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"3","s2_lec":"1","s2_sec":"2","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"3","total":"150"},
+        {"code":"CVE1249","name":"خواص واختبار المواد","grade":"الأولى","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"ARC2306","name":"التصميم المعماري (2)","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"5","s1_written":"-","s1_year":"60","s1_oral":"-","s1_time":"-","s2_lec":"1","s2_sec":"5","s2_written":"120","s2_year":"60","s2_oral":"60","s2_time":"7","total":"300"},
+        {"code":"ARC2307","name":"انشاء معماري (2)","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"4","s1_written":"-","s1_year":"60","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"4","s2_written":"120","s2_year":"60","s2_oral":"60","s2_time":"6","total":"300"},
+        {"code":"ARC2008","name":"تاريخ ونظريات العمارة (1)","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"1","s1_written":"35","s1_year":"15","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"1","s2_written":"40","s2_year":"10","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"ARC2109","name":"التحكم البيئي في المباني","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"75"},
+        {"code":"ARC2110","name":"تاريخ ونظريات التخطيط","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"HUM2121","name":"المنهج العلمي","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"-","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"75"},
+        {"code":"CVE2150","name":"الخرسانة المسلحة","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"ARC2211","name":"التدريب البصري (2)","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"50","s2_year":"25","s2_oral":"50","s2_time":"4","total":"125"},
+        {"code":"HUM2222","name":"تشريعات البناء وممارسة المهنة","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"-","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"2","total":"75"},
+        {"code":"CVE2251","name":"الإنشاءات المعدنية","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"ARC2212","name":"تخطيط وتنسيق المواقع","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"ARC2242","name":"التدريب الميداني (1)","grade":"الثانية","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"25","s2_oral":"25","s2_time":"-","total":"50"},
+        {"code":"ARC3313","name":"التصميم المعماري (3)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"5","s1_written":"-","s1_year":"60","s1_oral":"-","s1_time":"-","s2_lec":"1","s2_sec":"5","s2_written":"120","s2_year":"60","s2_oral":"60","s2_time":"7","total":"300"},
+        {"code":"ARC3314","name":"التصميمات التنفيذية (1)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"4","s1_written":"-","s1_year":"60","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"4","s2_written":"120","s2_year":"60","s2_oral":"60","s2_time":"6","total":"300"},
+        {"code":"ARC3015","name":"تخطيط المدن","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"50","s1_year":"20","s1_oral":"30","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"50","s2_year":"30","s2_oral":"20","s2_time":"3","total":"200"},
+        {"code":"ARC3116","name":"الكميات والمواصفات الفنية للمبانى","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"-","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"2","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"75"},
+        {"code":"CVE3152","name":"ميكانيكا التربة والأساسات","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"75","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"125"},
+        {"code":"ARC3017","name":"التركيبات الفنية والهندسة الصحية","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"3","total":"150"},
+        {"code":"ARC31xx","name":"مقرر اختياري (1)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"-","s1_written":"35","s1_year":"15","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"50"},
+        {"code":"ARC3222","name":"تاريخ ونظريات العمارة (2)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"ARC3223","name":"التصميم الداخلي (1)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"4","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"ARC32xx","name":"مقرر اختياري (2)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"-","s2_written":"35","s2_year":"15","s2_oral":"-","s1_time":"-","s2_time":"3","total":"50"},
+        {"code":"ARC3243","name":"التدريب الميداني (2)","grade":"الثالثة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"25","s2_oral":"25","s2_time":"-","total":"50"},
+        {"code":"ARC4128","name":"التصميم المعماري (4)","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"5","s1_written":"60","s1_year":"30","s1_oral":"60","s1_time":"7","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"ARC4129","name":"التصميمات التنفيذية (2)","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"5","s1_written":"60","s1_year":"30","s1_oral":"60","s1_time":"7","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"ARC4130","name":"التخطيط الاستراتيجي","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"3","s1_written":"60","s1_year":"40","s1_oral":"50","s1_time":"4","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"HUM4123","name":"مقرر إنسانيات","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"-","s1_written":"35","s1_year":"15","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"50"},
+        {"code":"ARC41xx","name":"مقرر اختياري (3)","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"ARC4036","name":"التصميم العمراني","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"4","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"4","s2_lec":"2","s2_sec":"4","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"4","total":"200"},
+        {"code":"ARC4231","name":"الاسكان والدراسات السكانية","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"40","s2_oral":"50","s2_time":"3","total":"150"},
+        {"code":"HUM4224","name":"ادارة المشروعات","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"HUM4225","name":"النقد المعماري","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"-","s2_written":"35","s2_year":"15","s2_oral":"-","s2_time":"2","total":"50"},
+        {"code":"ARC4337","name":"المشروع","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"2","s1_written":"-","s1_year":"50","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"4","s2_written":"-","s2_year":"50","s2_oral":"150","s2_time":"مناقشة","total":"300"},
+        {"code":"ARC42xx","name":"مقرر اختياري (4)","grade":"الرابعة","spec":"الهندسة المعمارية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"60","s2_year":"40","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 1001","name":"خواص واختبار المواد (1)","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"200"},
+        {"code":"CVE 1002","name":"مساحة مستوية","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"200"},
+        {"code":"CVE 1003","name":"نظرية وميكانيكا الإنشاءات (1)","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"3","s1_sec":"2","s1_written":"90","s1_year":"35","s1_oral":"-","s1_time":"3","s2_lec":"3","s2_sec":"2","s2_written":"90","s2_year":"35","s2_oral":"-","s2_time":"3","total":"250"},
+        {"code":"BAS 1108","name":"رياضيات هندسية (2)","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"4","s1_sec":"2","s1_written":"110","s1_year":"40","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"CVE 1104","name":"رسم مدني","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"3","s1_written":"90","s1_year":"35","s1_oral":"-","s1_time":"4","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"125"},
+        {"code":"EEP 1105","name":"هندسة آلية وكهربية","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"HUM 1110","name":"تشريعات وعقود","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"2","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"75"},
+        {"code":"BAS 1209","name":"رياضيات هندسية (3)","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"3","s2_sec":"2","s2_written":"110","s2_year":"40","s2_oral":"-","s2_time":"3","total":"150"},
+        {"code":"CVE 1205","name":"جيولوجيا هندسية","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"2","total":"75"},
+        {"code":"ARC 1244","name":"إنشاء معماري","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"HUM 1211","name":"اقتصاد هندسي","grade":"الأولى","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"2","total":"75"},
+        {"code":"CVE 2006","name":"تصميم منشآت خرسانية مسلحة (1)","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"200"},
+        {"code":"CVE 2007","name":"نظرية وميكانيكا الإنشاءات (2)","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"200"},
+        {"code":"CVE 2108","name":"مساحة طبوغرافية","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 2109","name":"خواص واختبار المواد (2)","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"2","s1_written":"90","s1_year":"30","s1_oral":"30","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"CVE 2110","name":"ميكانيكا الموائع","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"2","s1_written":"90","s1_year":"30","s1_oral":"30","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"HUM 2112","name":"احصاء تطبيقي","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"2","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 2211","name":"المساحة التصويرية ونظرية الأخطاء","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 2212","name":"ميكانيكا التربة (1)","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"3","s2_sec":"2","s2_written":"90","s2_year":"30","s2_oral":"30","s2_time":"3","total":"150"},
+        {"code":"CVE 2213","name":"هندسة الري والصرف","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 2214","name":"هيدرولوجيا","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"HUM 22XX","name":"مقرر انسانيات اختياري (1)","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"2","total":"100"},
+        {"code":"CVE 2247","name":"التدريب الميداني (1)","grade":"الثانية","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"25","s2_oral":"25","s2_time":"-","total":"50"},
+        {"code":"CVE 3015","name":"تصميم منشآت معدنية","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"200"},
+        {"code":"CVE 3016","name":"تصميم منشآت خرسانية مسلحة (2)","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"200"},
+        {"code":"CVE 3117","name":"تحليل إنشائي متقدم","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 3118","name":"ميكانيكا التربة (2)","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"2","s1_written":"90","s1_year":"30","s1_oral":"30","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"CVE 3119","name":"هيدروليكا","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 3120","name":"هندسة النقل والمرور","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"HUM 3115","name":"كتابة التقارير الفنية","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"1","s1_written":"35","s1_year":"15","s1_oral":"-","s1_time":"2","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"50"},
+        {"code":"CVE 3221","name":"تصميم أعمال الري (1)","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"3","s2_sec":"2","s2_written":"110","s2_year":"40","s2_oral":"-","s2_time":"3","total":"150"},
+        {"code":"CVE 3222","name":"هندسة السكك الحديدية","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"3","total":"75"},
+        {"code":"CVE 3223","name":"هندسة الأساسات (1)","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"3","s2_sec":"2","s2_written":"75","s2_year":"25","s2_oral":"25","s2_time":"3","total":"125"},
+        {"code":"CVE 3247","name":"إدارة مشروعات التشييد","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 32XX","name":"مقرر تخصصي اختياري (1)","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 3248","name":"التدريب الميداني (2)","grade":"الثالثة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"25","s2_oral":"25","s2_time":"-","total":"50"},
+        {"code":"CVE 4028","name":"تصميم منشآت خرسانية مسلحة (3)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"200"},
+        {"code":"CVE 4129","name":"هندسة الأساسات (2)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 4130","name":"هندسة صحية","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"2","s1_written":"90","s1_year":"35","s1_oral":"25","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"150"},
+        {"code":"CVE 4131","name":"تصميم أعمال الري (2)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 4132","name":"كميات ومواصفات","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"100"},
+        {"code":"CVE 41XX","name":"مقرر تخصصي اختياري (2)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"50","s1_year":"25","s1_oral":"-","s1_time":"3","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"75"},
+        {"code":"HUM 41XX","name":"مقرر انسانيات اختياري (2)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"1","s1_written":"35","s1_year":"15","s1_oral":"-","s1_time":"2","s2_lec":"-","s2_sec":"-","s2_written":"-","s2_year":"-","s2_oral":"-","s2_time":"-","total":"50"},
+        {"code":"CVE 4237","name":"تصميم كباري معدنية","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"3","s2_sec":"2","s2_written":"90","s2_year":"35","s2_oral":"-","s2_time":"3","total":"125"},
+        {"code":"CVE 4238","name":"هندسة الموانىء","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"50","s2_year":"25","s2_oral":"-","s2_time":"3","total":"75"},
+        {"code":"CVE 4239","name":"هندسة الطرق والمطارات","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"2","s2_written":"90","s2_year":"35","s2_oral":"-","s2_time":"3","total":"125"},
+        {"code":"CVE 42XX","name":"مقرر تخصصي اختياري (3)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 42XX","name":"مقرر تخصصي اختياري (4)","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"-","s1_sec":"-","s1_written":"-","s1_year":"-","s1_oral":"-","s1_time":"-","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"-","s2_time":"3","total":"100"},
+        {"code":"CVE 4346","name":"المشروع","grade":"الرابعة","spec":"الهندسة المدنية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"2","s1_written":"-","s1_year":"50","s1_oral":"-","s1_time":"-","s2_lec":"1","s2_sec":"4","s2_written":"-","s2_year":"50","s2_oral":"100","s2_time":"مناقشة","total":"200"},
+        {"code":"BAS1004","name":"رياضيات هندسية (2)","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"--","total":"200"},
+        {"code":"EEP1001","name":"دوائر كهربية","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"200"},
+        {"code":"HUM1103","name":"اقتصاد هندسي","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"50","s1_year":"25","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"75"},
+        {"code":"EEC1003","name":"برمجة الحاسبات","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"--","total":"200"},
+        {"code":"BAS1105","name":"فيزياء هندسية (٢)","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"90","s1_year":"30","s1_oral":"30","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"150"},
+        {"code":"ΜΕP1104","name":"هندسة قوى ميكانيكية","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE1201","name":"قياسات وأجهزة قياس كهربية","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEC1202","name":"تصميم منطقي","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"3","s2_written":"100","s2_year":"25","s2_oral":"25","s2_time":"3","total":"150"},
+        {"code":"EEE1002","name":"هندسة الكترونيات (1)","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"200"},
+        {"code":"HUM1204","name":"تقارير فنية","grade":"الأولى","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"1","s2_written":"50","s2_year":"25","s2_oral":"--","s2_time":"2","total":"75"},
+        {"code":"BAS2006","name":"رياضيات هندسية (3)","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"200"},
+        {"code":"EEC2104","name":"هياكل البيانات والخوارزميات","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"100","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"150"},
+        {"code":"EEP2002","name":"مجالات كهرومغناطيسية","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة ممتدة (فصلين)","s1_lec":"3","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"3","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"200"},
+        {"code":"EEE2103","name":"هندسة الكترونيات (2)","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE2104","name":"معالجة الإشارات","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"3","s1_written":"90","s1_year":"35","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"125"},
+        {"code":"HUM2105","name":"أمن صناعي","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"50","s1_year":"25","s1_oral":"--","s1_time":"2","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"75"},
+        {"code":"EEC2105","name":"بنية الحاسب","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC2206","name":"نظم ادارة قواعد البيانات","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEC2207","name":"نظم المشغلات الدقيقة","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"1","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEP2203","name":"آلات ومحولات كهربية","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEE2205","name":"الاتصالات الكهربية","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEC2208","name":"هندسه التحكم الآلى (1)","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EE2233","name":"التدريب الميداني (1)","grade":"الثانية","spec":"الهندسة الكهربية","dept":"عامة","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"25","s2_oral":"25","s2_time":"--","total":"50"},
+        {"code":"EEC3109","name":"هندسة البرمجيات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"75","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"125"},
+        {"code":"EEC3110","name":"تصميم وتحليل الخوارزميات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"2","s1_written":"75","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"125"},
+        {"code":"EEC3111","name":"وسائط متعددة","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"3","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC3112","name":"هندسه التحكم الآلى (2)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC3113","name":"المترجمات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"90","s1_year":"35","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"125"},
+        {"code":"HUM3106","name":"إدارة المشروعات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"1","s1_written":"40","s1_year":"10","s1_oral":"--","s1_time":"2","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"50"},
+        {"code":"BAS3107","name":"رياضيات هندسية (٤)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"3","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC32xx","name":"مقرر اختياري (1)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEC3217","name":"النمذجة والمحاكاة","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"1","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEC3218","name":"نظم التشغيل","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"3","s2_written":"75","s2_year":"25","s2_oral":"25","s2_time":"3","total":"125"},
+        {"code":"EEC3219","name":"الذكاء الاصطناعي","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"3","s2_sec":"2","s2_written":"75","s2_year":"25","s2_oral":"25","s2_time":"3","total":"125"},
+        {"code":"EEC3220","name":"التحكم الرقمي","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"3","s2_written":"75","s2_year":"25","s2_oral":"25","s2_time":"3","total":"125"},
+        {"code":"EEC3221","name":"أساليب البرمجة المتقدمة","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"HUM3207","name":"مهارات البحث والتحليل","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"--","s2_written":"40","s2_year":"10","s2_oral":"--","s2_time":"2","total":"50"},
+        {"code":"EEC3234","name":"التدريب الميداني (2)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"25","s2_oral":"25","s2_time":"--","total":"50"},
+        {"code":"EEC4022","name":"شبكات الحاسب","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"200"},
+        {"code":"EEC4123","name":"نظم قواعد بيانات متقدمة","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"75","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"125"},
+        {"code":"EEC4124","name":"الشبكات العصبية الأصطناعيه","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC4125","name":"التحكم والقياس في العمليات الصناعية","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC41XX","name":"مقرر اختياري (2)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEC41XX","name":"مقرر اختياري (3)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"HUM4108","name":"مجتمع تكنولوجيا المعلومات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم أول)","s1_lec":"1","s2_sec":"--","s1_written":"50","s1_year":"25","s1_oral":"--","s1_time":"2","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"75"},
+        {"code":"EEC4232","name":"نظم التحكم الذكية","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"--","total":"100"},
+        {"code":"EEC42XX","name":"مقرر اختياري (4)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"1","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEC42XX","name":"مقرر اختياري (5)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"1","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEC4243","name":"أمن الشبكات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"2","total":"100"},
+        {"code":"EEC4239","name":"نظم الروبوتات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEC4340","name":"المشروع","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الحاسبات والتحكم","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"1","s1_written":"--","s1_year":"50","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"4","s2_written":"--","s2_year":"50","s2_oral":"100","s2_time":"مناقشة","total":"200"},
+        {"code":"EEE3006","name":"موجات كهرومغناطيسية","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة ممتدة (فصلين)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"200"},
+        {"code":"EEC3141","name":"مقدمة في الذكاء الاصطناعي","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"BAS3107","name":"رياضيات هندسية (٤)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE3107","name":"هندسة الكترونيات (٣)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"3","s1_written":"100","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"150"},
+        {"code":"EEE3108","name":"دوائر الاتصالات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"3","s1_written":"100","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"150"},
+        {"code":"EEE3109","name":"الكترونيات بصرية","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"HUM3106","name":"إدارة المشروعات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"--","s1_written":"40","s1_year":"10","s1_oral":"--","s1_time":"2","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"50"},
+        {"code":"EEE3210","name":"صوتيات","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEE3211","name":"الأنظمة المدمجة","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEE3212","name":"تصميم الدوائر الإلكترونية المتكامله","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"3","s2_written":"90","s2_year":"35","s2_oral":"--","s2_time":"3","total":"125"},
+        {"code":"EEE3213","name":"نظم الاتصالات الرقمية","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"3","s2_written":"75","s2_year":"25","s2_oral":"25","s2_time":"3","total":"125"},
+        {"code":"EEE32xx","name":"مقرر اختياري (1)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"1","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"HUM3207","name":"مهارات البحث والتحليل","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"--","s2_written":"40","s2_year":"10","s2_oral":"--","s2_time":"2","total":"50"},
+        {"code":"EEE3234","name":"التدريب الميداني (2)","grade":"الثالثة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"25","s2_oral":"25","s2_time":"--","total":"50"},
+        {"code":"EEP4104","name":"الكترونيات القوى","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"75","s1_year":"25","s1_oral":"25","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"125"},
+        {"code":"EEC4142","name":"أساسيات شبكات الحاسب","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE4117","name":"نظرية المعلومات والترميز","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE4118","name":"الانتشار الموجى والهوائيات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"2","s1_written":"60","s1_year":"20","s1_oral":"20","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE41xx","name":"مقرر اختياري (2)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"EEE41xx","name":"مقرر اختياري (3)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"1","s1_sec":"2","s1_written":"70","s1_year":"30","s1_oral":"--","s1_time":"3","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"100"},
+        {"code":"HUM4108","name":"مجتمع تكنولوجيا المعلومات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم أول)","s1_lec":"2","s1_sec":"1","s1_written":"50","s1_year":"25","s1_oral":"--","s1_time":"2","s2_lec":"--","s2_sec":"--","s2_written":"--","s2_year":"--","s2_oral":"--","s2_time":"--","total":"75"},
+        {"code":"EEE4225","name":"الاتصالات المتحركة","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEE4226","name":"أنظمة التليفونات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEE42xx","name":"مقرر اختياري (4)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"1","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEE42xx","name":"مقرر اختياري (5)","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"1","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"3","total":"100"},
+        {"code":"EEE4233","name":"الاتصالات الضوئية","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"60","s2_year":"20","s2_oral":"20","s2_time":"3","total":"100"},
+        {"code":"EEC4243","name":"أمن الشبكات","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة منتهية (ترم ثاني)","s1_lec":"--","s1_sec":"--","s1_written":"--","s1_year":"--","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"2","s2_written":"70","s2_year":"30","s2_oral":"--","s2_time":"2","total":"100"},
+        {"code":"EEE4334","name":"المشروع","grade":"الرابعة","spec":"الهندسة الكهربية","dept":"هندسة الالكترونيات والاتصالات الكهربية","type":"مادة ممتدة (فصلين)","s1_lec":"1","s1_sec":"1","s1_written":"--","s1_year":"50","s1_oral":"--","s1_time":"--","s2_lec":"2","s2_sec":"4","s2_written":"--","s2_year":"50","s2_oral":"100","s2_time":"مناقشة","total":"200"}
+    ];
+
+    const allColumns = [
+        { key: "code", label: "كود المادة", visible: true },
+        { key: "name", label: "اسم المقرر", visible: true },
+        { key: "grade", label: "الفرقة", visible: true },
+        { key: "spec", label: "التخصص", visible: true },
+        { key: "dept", label: "الشعبة", visible: true },
+        { key: "type", label: "تصنيف المادة", visible: true },
+        { key: "s1_lec", label: "ت1: محاضرات", visible: true },
+        { key: "s1_sec", label: "ت1: تمارين", visible: true },
+        { key: "s1_written", label: "ت1: تحريري", visible: true },
+        { key: "s1_year", label: "ت1: أعمال سنة", visible: true },
+        { key: "s1_oral", label: "ت1: شفوي/عملي", visible: true },
+        { key: "s1_time", label: "ت1: مدة الامتحان", visible: false },
+        { key: "s2_lec", label: "ت2: محاضرات", visible: true },
+        { key: "s2_sec", label: "ت2: تمارين", visible: true },
+        { key: "s2_written", label: "ت2: تحريري", visible: true },
+        { key: "s2_year", label: "ت2: أعمال سنة", visible: true },
+        { key: "s2_oral", label: "ت2: شفوي/عملي", visible: true },
+        { key: "s2_time", label: "ت2: مدة الامتحان", visible: false },
+        { key: "total", label: "المجموع الكلي", visible: true }
+    ];
+
+    let filteredData = [...rawData];
+
+    function init() {
+        populateDropdowns();
+        renderColumnToggles();
+        applyFilters();
+    }
+
+    function populateDropdowns() {
+        const grades = [...new Set(rawData.map(item => item.grade))];
+        const specs = [...new Set(rawData.map(item => item.spec))];
+
+        const gradeSelect = document.getElementById('gradeFilter');
+        grades.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g;
+            opt.textContent = g;
+            gradeSelect.appendChild(opt);
+        });
+
+        const specSelect = document.getElementById('specFilter');
+        specs.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            specSelect.appendChild(opt);
+        });
+    }
+
+    function renderColumnToggles() {
+        const container = document.getElementById('colToggleGrid');
+        container.innerHTML = '';
+        allColumns.forEach((col, index) => {
+            const item = document.createElement('label');
+            item.className = 'col-toggle-item';
+            item.innerHTML = `
+                <input type="checkbox" ${col.visible ? 'checked' : ''} onchange="toggleColumn(${index})">
+                <span>${col.label}</span>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function toggleColumn(index) {
+        allColumns[index].visible = !allColumns[index].visible;
+        renderTable();
+    }
+
+    function applyFilters() {
+        const globalSearch = document.getElementById('globalSearch').value.trim().toLowerCase();
+        const typeVal = document.getElementById('typeFilter').value;
+        const gradeVal = document.getElementById('gradeFilter').value;
+        const specVal = document.getElementById('specFilter').value;
+        
+        const colSelect = document.getElementById('colSelect').value;
+        const colSearch = document.getElementById('colSearch').value.trim().toLowerCase();
+
+        filteredData = rawData.filter(item => {
+            if (typeVal && item.type !== typeVal) return false;
+            if (gradeVal && item.grade !== gradeVal) return false;
+            if (specVal && item.spec !== specVal) return false;
+
+            if (colSearch && !String(item[colSelect]).toLowerCase().includes(colSearch)) return false;
+
+            if (globalSearch) {
+                const combined = Object.values(item).join(' ').toLowerCase();
+                if (!combined.includes(globalSearch)) return false;
+            }
+
+            return true;
+        });
+
+        document.getElementById('recordCount').textContent = filteredData.length;
+        document.getElementById('filteredCount').textContent = filteredData.length;
+
+        renderTable();
+        updateStats();
+    }
+
+    function renderTable() {
+        const headerRow = document.getElementById('tableHeader');
+        const body = document.getElementById('tableBody');
+
+        headerRow.innerHTML = '';
+        body.innerHTML = '';
+
+        allColumns.forEach(col => {
+            if (col.visible) {
+                const th = document.createElement('th');
+                th.textContent = col.label;
+                th.onclick = () => sortTable(col.key);
+                headerRow.appendChild(th);
+            }
+        });
+
+        filteredData.forEach(row => {
+            const tr = document.createElement('tr');
+            allColumns.forEach(col => {
+                if (col.visible) {
+                    const td = document.createElement('td');
+                    let val = row[col.key];
+
+                    if (col.key === 'type') {
+                        let badgeClass = 'badge-extended';
+                        if (val.includes('ترم أول')) badgeClass = 'badge-term1';
+                        if (val.includes('ترم ثاني')) badgeClass = 'badge-term2';
+                        td.innerHTML = `<span class="badge ${badgeClass}">${val}</span>`;
+                    } else {
+                        td.textContent = val;
+                    }
+
+                    tr.appendChild(td);
+                }
+            });
+            body.appendChild(tr);
+        });
+    }
+
+    function resetFilters() {
+        document.getElementById('globalSearch').value = '';
+        document.getElementById('typeFilter').value = '';
+        document.getElementById('gradeFilter').value = '';
+        document.getElementById('specFilter').value = '';
+        document.getElementById('colSearch').value = '';
+        applyFilters();
+    }
+
+    function updateStats() {
+        document.getElementById('statTotal').textContent = filteredData.length;
+        document.getElementById('statExtended').textContent = filteredData.filter(d => d.type.includes('فصلين')).length;
+        document.getElementById('statTerm1').textContent = filteredData.filter(d => d.type.includes('ترم أول')).length;
+        document.getElementById('statTerm2').textContent = filteredData.filter(d => d.type.includes('ترم ثاني')).length;
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+
+        document.getElementById(tabId).classList.remove('hidden');
+
+        if (tabId === 'data-tab') document.getElementById('tab-btn-data').classList.add('active');
+        if (tabId === 'columns-tab') document.getElementById('tab-btn-columns').classList.add('active');
+        if (tabId === 'stats-tab') document.getElementById('tab-btn-stats').classList.add('active');
+    }
+
+    let sortAsc = true;
+    function sortTable(key) {
+        sortAsc = !sortAsc;
+        filteredData.sort((a, b) => {
+            let v1 = a[key];
+            let v2 = b[key];
+            if (!isNaN(v1) && !isNaN(v2)) {
+                return sortAsc ? Number(v1) - Number(v2) : Number(v2) - Number(v1);
+            }
+            return sortAsc ? String(v1).localeCompare(String(v2)) : String(v2).localeCompare(String(a[key]));
+        });
+        renderTable();
+    }
+
+    function exportCSV() {
+        let csvContent = "\uFEFF";
+        const headers = allColumns.filter(c => c.visible).map(c => `"${c.label}"`).join(",");
+        csvContent += headers + "\n";
+
+        filteredData.forEach(row => {
+            const line = allColumns.filter(c => c.visible).map(c => `"${row[c.key]}"`).join(",");
+            csvContent += line + "\n";
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Bylaws2018_Courses.csv';
+        a.click();
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>
